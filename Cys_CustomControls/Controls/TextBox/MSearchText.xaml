@@ -1,0 +1,123 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Cys_CustomControls.Controls">
+
+    <Style TargetType="{x:Type local:MSearchText}">
+        <Setter Property="Foreground" Value="{DynamicResource WebBrowserBrushes.SearchForegroundColor}"/>
+        <Setter Property="Background" Value="{DynamicResource WebBrowserBrushes.SearchBackgroundColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource WebBrowserBrushes.SearchBorderBrushColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:MSearchText}">
+                    <Grid VerticalAlignment="Center">
+                        <Border x:Name="PART_Border" CornerRadius="{TemplateBinding CornerRadius}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" 
+                                    SnapsToDevicePixels="true">
+                            <Border.Effect>
+                                <DropShadowEffect x:Name="PART_DropShadow" BlurRadius="5" ShadowDepth="0" Color="{TemplateBinding FocusedBrush}" Opacity="0"/>
+                            </Border.Effect>
+                        </Border>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Button Style="{DynamicResource Button.NavigationSearch}" Margin="2,0"/>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <ScrollViewer x:Name="PART_ContentHost" FontSize="{TemplateBinding FontSize}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" BorderThickness="0" IsTabStop="False"
+                                          HorizontalAlignment="{TemplateBinding HorizontalAlignment}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="4,0"/>
+                                <!--水印-->
+                                <TextBlock x:Name="Part_Watermark" Text="{TemplateBinding Watermark}" FontSize="{TemplateBinding FontSize}" Visibility="Hidden" HorizontalAlignment="Left"
+                                   Foreground="{DynamicResource ColorBrush.FontWatermarkColor}" IsHitTestVisible="False" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="5,0"/>
+                            </Grid>
+
+                            <Grid Grid.Column="2">
+                                <!--<ToggleButton x:Name="PART_ZoomButton" FontSize="16" Style="{DynamicResource ToggleButton.FontButton}" IsChecked="{Binding ElementName=PART_ZoomPopUp, Path=IsOpen,Mode=OneWay}" Margin="2,0"/>-->
+
+                                <ToggleButton x:Name="PART_ZoomButton" FontSize="16" Style="{DynamicResource ToggleButton.FontButton}" IsChecked="{TemplateBinding ZoomIsChecked}" Margin="2,0"/>
+                            </Grid>
+
+                            <Grid Grid.Column="3">
+                                <ToggleButton Style="{DynamicResource ToggleButton.NavigationCollection}" Margin="2,0"/>
+                            </Grid>
+                        </Grid>
+                        <Popup x:Name="PART_ZoomPopUp" PopupAnimation="Fade" Placement="Bottom" PlacementTarget="{Binding ElementName=PART_ZoomButton}"
+                               StaysOpen="{TemplateBinding ZoomStaysOpen}" AllowsTransparency="True" HorizontalOffset="-180" VerticalOffset="5" IsOpen="{TemplateBinding ZoomIsChecked}">
+                            <Border Background="{DynamicResource WebBrowserBrushes.SearchZoomPopupBackground}" CornerRadius="5">
+                                <DockPanel Width="251" Height="40">
+                                    <TextBlock Text="{TemplateBinding ZoomRatio}" VerticalAlignment="Center" Margin="15,0,0,0" HorizontalAlignment="Left"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,15,0">
+                                        <Button Content="&#xe60c;" Style="{DynamicResource Button.FontButton}" Width="26" Height="26" Command="{TemplateBinding ZoomOutCommand}"/>
+                                        <Button Content="&#xe699;" Style="{DynamicResource Button.FontButton}" Margin="10,0,0,0" Width="26" Height="26" Command="{TemplateBinding ZoomInCommand}"/>
+                                        <Button Content="重置" Style="{DynamicResource Button.FontButton}" Margin="10,0,0,0" Width="64" Background="{DynamicResource WebBrowserBrushes.SearchZoomPopupResetBackground}" Command="{TemplateBinding ZoomResetCommand}"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!--显示水印-->
+                        <Trigger Property="Text" Value="">
+                            <Setter TargetName="Part_Watermark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Border" Property="BorderThickness" Value="1" />
+                        </Trigger>
+
+                        <Trigger Property="ZoomLevelType" Value="None">
+                            <Setter TargetName="PART_ZoomButton" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="ZoomLevelType" Value="In">
+                            <Setter TargetName="PART_ZoomButton" Property="Content" Value="&#xe678;" />
+                        </Trigger>
+                        <Trigger Property="ZoomLevelType" Value="Out">
+                            <Setter TargetName="PART_ZoomButton" Property="Content" Value="&#xe620;" />
+                        </Trigger>
+                        <Trigger SourceName="PART_ZoomButton" Property="IsChecked"  Value="True">
+                            <Setter TargetName="PART_ZoomPopUp" Property="IsOpen" Value="True" />
+                        </Trigger>
+                        <Trigger SourceName="PART_ZoomButton" Property="IsChecked"  Value="False">
+                            <Setter TargetName="PART_ZoomPopUp" Property="IsOpen" Value="False" />
+                        </Trigger>
+
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{DynamicResource WebBrowserBrushes.SearchFocusBorderBrushColor}" />
+                            <Setter TargetName="PART_Border" Property="BorderThickness" Value= "2"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_DropShadow" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.15">
+                                            <DoubleAnimation.EasingFunction>
+                                                <BackEase EasingMode="EaseInOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_DropShadow" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.15">
+                                            <DoubleAnimation.EasingFunction>
+                                                <BackEase EasingMode="EaseInOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

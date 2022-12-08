@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Platforms>AnyCPU;x86</Platforms>
+	<CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
+	<ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <None Remove="Model\**" />
+    <Page Remove="Model\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CefSharp.Wpf" Version="86.0.241" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cys_Common\Cys_Common.csproj" />
+    <ProjectReference Include="..\Cys_CustomControls\Cys_CustomControls.csproj" />
+    <ProjectReference Include="..\Cys_Resource\Cys_Resource.csproj" />
+    <ProjectReference Include="..\Cys_Services\Cys_Services.csproj" />
+  </ItemGroup>
+
+</Project>
